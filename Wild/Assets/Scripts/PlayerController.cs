@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInputActions _playerControls;
     private InputAction _move;
     private InputAction _jump;
+    private InputAction _interact;
 
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _moveDirection = Vector3.zero;
     public Vector2 Input2D { get; private set; }
     public bool IsJumping { get; private set; }
+    public bool isInteracting;
     
     private void Awake()
     {
@@ -46,6 +48,10 @@ public class PlayerController : MonoBehaviour
         _jump = _playerControls.Player.Jump;
         _jump.Enable();
         _jump.performed += Jump;
+
+        _interact = _playerControls.Player.Interact;
+        _interact.Enable();
+        _interact.performed += Interact;
     }
 
     private void OnDisable()
@@ -54,6 +60,9 @@ public class PlayerController : MonoBehaviour
         
         _jump.Disable();
         _jump.performed -= Jump;
+        
+        _interact.Disable();
+        _interact.performed -= Interact;
     }
     
 
@@ -96,5 +105,10 @@ public class PlayerController : MonoBehaviour
         if (!IsGrounded()) return;
         _rb.AddForce(Vector3.up * jumpForce, ForceMode.VelocityChange);
         IsJumping = true;
+    }
+
+    private void Interact(InputAction.CallbackContext context)
+    {
+        isInteracting = true;
     }
 }
