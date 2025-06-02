@@ -14,8 +14,6 @@ public class InteractableController : MonoBehaviour
     [Tooltip("The text to display when interacting after getting this item")] [SerializeField]
     private string afterUnlockText;
     
-    [SerializeField] TextMeshProUGUI gameText;
-    
     [Header("Interaction Rules")]
     [SerializeField] private bool hasBeenUnlocked;
     [SerializeField] private bool hasNeededItem;
@@ -26,22 +24,21 @@ public class InteractableController : MonoBehaviour
         hasBeenUnlocked = false;
     }
 
-    public void InteractWithPlayer()
+    public string InteractWithPlayer()
     {
         if (hasBeenUnlocked)
         {
-            gameText.text = afterUnlockText;
-            return;
+            return afterUnlockText;
         }
 
         if (hasNeededItem)
         {
             hasBeenUnlocked = true;
-            gameText.text = atUnlockText;
+            return atUnlockText;
         }
         else
         {
-            gameText.text = beforeUnlockText;
+            return beforeUnlockText;
         }
     }
 }

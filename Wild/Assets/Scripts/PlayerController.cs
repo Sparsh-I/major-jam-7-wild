@@ -28,6 +28,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundLayer;
     
+    [Header("References")]
+    private GameManager _gameManager;
+    
     private InteractableController _currentInteractable;
     
     private Vector3 _moveDirection = Vector3.zero;
@@ -111,7 +114,7 @@ public class PlayerController : MonoBehaviour
 
     private void Interact(InputAction.CallbackContext context)
     {
-        if (_currentInteractable) _currentInteractable.InteractWithPlayer();
+        if (_currentInteractable) GameManager.Instance.SetGameText(_currentInteractable.InteractWithPlayer());
 
         isInteracting = true;
     }
