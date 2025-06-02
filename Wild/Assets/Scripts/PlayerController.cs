@@ -28,6 +28,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.2f;
     [SerializeField] private LayerMask groundLayer;
     
+    private InteractableController _currentInteractable;
+    
     private Vector3 _moveDirection = Vector3.zero;
     public Vector2 Input2D { get; private set; }
     public bool IsJumping { get; private set; }
@@ -109,6 +111,24 @@ public class PlayerController : MonoBehaviour
 
     private void Interact(InputAction.CallbackContext context)
     {
+        if (_currentInteractable) _currentInteractable.InteractWithPlayer();
+
         isInteracting = true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out InteractableController interactable))
+        {
+            _currentInteractable = interactable;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (_currentInteractable && other.gameObject == _currentInteractable.gameObject)
+        {
+            _currentInteractable = null;
+        }
     }
 }
