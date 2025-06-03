@@ -1,4 +1,5 @@
 ﻿using System;
+using Managers;
 using TMPro;
 using UnityEngine;
 
@@ -54,7 +55,7 @@ namespace Controllers
                 return atUnlockText;
             }
 
-            _completedFirstInteraction = true;
+            if (GameManager.Instance.DisplayTextCoroutine != null) _completedFirstInteraction = true;
             return beforeUnlockText;
         }
 

@@ -484,8 +484,12 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  deathScene: Game Over Death
+  deathYLevel: -5
   heldItem: 
   heldItemText: {fileID: 4775474678599073756}
+  isInverted: 0
+  isSwapped: 0
   isInteracting: 0
 --- !u!54 &7621948241487242508
 Rigidbody:

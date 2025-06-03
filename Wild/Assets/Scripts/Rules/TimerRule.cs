@@ -1,11 +1,14 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Rules
 {
     public class TimerRule : MonoBehaviour, IGameRule
     {
         public string RuleName => "Timer";
+
+        [SerializeField] private string outOfTimeScene;
         
         [Header("Timer Settings")]
         [SerializeField] private int max30SecondInterval;
@@ -44,7 +47,7 @@ namespace Rules
             
             if (_timer <= 0)
             {
-                Debug.Log("Time's up!");
+                SceneManager.LoadScene(outOfTimeScene);
                 return;
             }
             

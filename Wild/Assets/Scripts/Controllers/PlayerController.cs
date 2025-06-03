@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Managers;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 namespace Controllers
 {
@@ -26,6 +27,10 @@ namespace Controllers
         [SerializeField] private Transform groundCheckPoint;
         [SerializeField] private float groundCheckRadius = 0.2f;
         [SerializeField] private LayerMask groundLayer;
+
+        [Header("Death Settings")]
+        [SerializeField] private string deathScene;
+        [SerializeField] private float deathYLevel;
         
         [Header("References")]
         [SerializeField] private string heldItem;
@@ -61,7 +66,10 @@ namespace Controllers
 
         public void UpdateControlScheme(bool invertedActive, bool swappedActive)
         {
-            ResetControlMap();
+            isInverted = invertedActive;
+            isSwapped = swappedActive;
+            
+            DisableControls();
 
             switch (invertedActive)
             {
@@ -76,32 +84,22 @@ namespace Controllers
                     break;
             }
         }
-
-        private void ResetControlMap()
-        {
-            PlayerControls.Player.Disable();
-            PlayerControls.PlayerInverted.Disable();
-            PlayerControls.PlayerSwapHands.Disable();
-            PlayerControls.PlayerSwapHandsInverted.Disable();
-        }
-
+        
         public void EnableControls(string controlMap)
         {
             DisableControls();
             
             var map = PlayerControls.asset.FindActionMap(controlMap);
 
-            if (map != null)
-            {
-                map.Enable();
+            if (map == null) return;
+            map.Enable();
 
-                _move = map.FindAction("Move");
-                _jump = map.FindAction("Jump");
-                _interact = map.FindAction("Interact");
+            _move = map.FindAction("Move");
+            _jump = map.FindAction("Jump");
+            _interact = map.FindAction("Interact");
                 
-                if (_jump != null) _jump.performed += Jump;
-                if (_interact != null) _interact.performed += Interact;
-            }
+            if (_jump != null) _jump.performed += Jump;
+            if (_interact != null) _interact.performed += Interact;
         }
 
         private void DisableControls()
@@ -120,6 +118,8 @@ namespace Controllers
         
         void Update()
         {
+            if (transform.position.y < deathYLevel) SceneManager.LoadScene(deathScene);
+            
             heldItemText.text = heldItem;
             Input2D = _move.ReadValue<Vector2>();
             var input = new Vector3(Input2D.x, 0f, Input2D.y);

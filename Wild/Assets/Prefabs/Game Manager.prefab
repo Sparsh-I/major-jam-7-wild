@@ -418,6 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameText: {fileID: 7199673492125492139}
+  typingFrequency: 0.01
 --- !u!1 &7354133486358730694
 GameObject:
   m_ObjectHideFlags: 0
