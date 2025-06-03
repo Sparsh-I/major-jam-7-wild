@@ -7,8 +7,14 @@ namespace Controllers
     public class InteractableController : MonoBehaviour
     {
         [Header("Item Settings")]
-        [SerializeField] private string itemObtained;
-        [SerializeField] private string itemNeeded;
+        [Tooltip("What item do you get after unlocking this item?")] [SerializeField]
+        private string itemObtained;
+        
+        [Tooltip("What item is needed to unlock this interactable?")] [SerializeField]
+        private string itemNeeded;
+        
+        [Tooltip("Does this item change appearance by having something added to it (e.g. statue with rock added)?")] [SerializeField] 
+        private bool itemToAddTo;
         
         [Header("Interaction Texts")]
         [Tooltip("The text to display when interacting before getting the needed item")] [SerializeField]
@@ -53,8 +59,8 @@ namespace Controllers
         {
             if (transform.childCount > 0)
             {
-                Transform child = transform.GetChild(0);
-                child.gameObject.SetActive(false);
+                var child = transform.GetChild(0);
+                child.gameObject.SetActive(itemToAddTo);
             }
         }
     }

@@ -2,17 +2,16 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Managers;
+using TMPro;
 
 namespace Controllers
 {
     public class PlayerController : MonoBehaviour
     {
         private Rigidbody _rb;
-        
-        private PlayerInputActions _playerControls;
-        private InputAction _move;
-        private InputAction _jump;
-        private InputAction _interact;
+
+        public PlayerInputActions PlayerControls { get; private set; }
+        private InputAction _move, _jump, _interact;
 
         [Header("Movement Settings")]
         [SerializeField] private float moveSpeed;
@@ -29,10 +28,12 @@ namespace Controllers
         [SerializeField] private LayerMask groundLayer;
         
         [Header("References")]
+        [SerializeField] private string heldItem;
+        [SerializeField] private TextMeshProUGUI heldItemText;
+        
         private GameManager _gameManager;
         
         private InteractableController _currentInteractable;
-        [SerializeField] private string heldItem;
         
         private Vector3 _moveDirection = Vector3.zero;
         public Vector2 Input2D { get; private set; }
@@ -41,43 +42,57 @@ namespace Controllers
         
         private void Awake()
         {
-            _playerControls = new PlayerInputActions();
+            PlayerControls = new PlayerInputActions();
             _rb = GetComponent<Rigidbody>();
             _rb.useGravity = false;
         }
 
         private void OnEnable()
         {
-            _move = _playerControls.Player.Move;
-            _move.Enable();
-            
-            _jump = _playerControls.Player.Jump;
-            _jump.Enable();
-            _jump.performed += Jump;
-
-            _interact = _playerControls.Player.Interact;
-            _interact.Enable();
-            _interact.performed += Interact;
+            EnableControls("Player");
         }
 
         private void OnDisable()
         {
-            _move.Disable();
+            DisableControls();
+        }
+
+        public void EnableControls(string controlMap)
+        {
+            DisableControls();
             
-            _jump.Disable();
-            _jump.performed -= Jump;
+            var map = PlayerControls.asset.FindActionMap(controlMap);
+
+            if (map != null)
+            {
+                map.Enable();
+
+                _move = map.FindAction("Move");
+                _jump = map.FindAction("Jump");
+                _interact = map.FindAction("Interact");
+                
+                if (_jump != null) _jump.performed += Jump;
+                if (_interact != null) _interact.performed += Interact;
+            }
+        }
+
+        private void DisableControls()
+        {
+            foreach (var map in PlayerControls.asset.actionMaps)
+                map.Disable();
             
-            _interact.Disable();
-            _interact.performed -= Interact;
+            if (_jump != null) _jump.performed -= Jump;
+            if (_interact != null) _interact.performed -= Interact;
         }
 
         private void Start()
         {
-            heldItem = "none";
+            heldItem = "None";
         }
         
         void Update()
         {
+            heldItemText.text = heldItem;
             Input2D = _move.ReadValue<Vector2>();
             var input = new Vector3(Input2D.x, 0f, Input2D.y);
             _moveDirection = Quaternion.Euler(0, 45, 0) * input;
