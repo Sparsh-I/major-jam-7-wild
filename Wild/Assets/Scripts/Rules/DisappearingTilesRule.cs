@@ -10,21 +10,18 @@ namespace Rules
         public string RuleName => "Disappearing Ground";
         
         [Header("Time Settings")]
-        [SerializeField] private float interval;
+        [SerializeField] private float maxIntervalLength;
         [SerializeField] private float hideTime;
         
         [Header("Countdown Settings")]
         [SerializeField] private float countdownStartTime;
         [SerializeField] private TextMeshProUGUI countdownTitle;
         [SerializeField] private TextMeshProUGUI countdownText;
-
-        [Header("Blink Settings")]
-        [SerializeField] private int numberOfBlinks;
-        [SerializeField] private float blinkTime;
         
         [Header("References")]
         [SerializeField] private GameObject floor;
-        
+
+        private float _interval;
         private float _timer;
         private bool _active;
         private bool _isBlinking;
@@ -37,7 +34,8 @@ namespace Rules
         
         public void Activate()
         {
-            _timer = interval;
+            _interval = Random.Range(countdownStartTime, maxIntervalLength);
+            _timer = _interval;
             _active = true;
         }
         
@@ -50,12 +48,14 @@ namespace Rules
         private void Update()
         {
             if (!_active) return;
+            
+            _interval = Random.Range(countdownStartTime, maxIntervalLength);
 
             _timer -= Time.deltaTime;
             if (_timer <= 0)
             {
                 StartCoroutine(ShowAndHideGround());
-                _timer = interval;
+                _timer = _interval;
             } 
             else if (_timer <= countdownStartTime)
             {
@@ -66,92 +66,7 @@ namespace Rules
             {
                 countdownTitle.gameObject.SetActive(false);
             }
-
-            // if (!_active) return;
-            //
-            // _timer -= Time.deltaTime;
-            // if (_timer <= 0)
-            // {
-            //     StartCoroutine(ShowAndHideGround());
-            //     _timer = interval;
-            // } 
-            // else if (_timer <= blinkTime * 2 * numberOfBlinks)
-            // {
-            //     StartCoroutine(BlinkGround());
-            // }
-            //
-            //
-            //  if (!_active || _isBlinking) return;
-            //
-            // _timer -= Time.deltaTime;
-            //  if (_timer <= blinkTime * 2 * numberOfBlinks && !_isBlinking)
-            // {
-            //     StartCoroutine(BlinkAndFade());
-            //     _timer = interval;
-            // }
-
         }
-
-        private IEnumerator BlinkAndFade()
-        {
-            _isBlinking = true;
-            
-            for (var i = 0; i < numberOfBlinks; i++)
-            {
-                foreach (Transform child in floor.transform)
-                {
-                    var fader = child.GetComponent<MeshFader>();
-                    if (fader) fader.FadeOut(blinkTime);
-                }
-                
-                yield return new WaitForSeconds(blinkTime);
-                
-                foreach (Transform child in floor.transform)
-                {
-                    var fader = child.GetComponent<MeshFader>();
-                    if (fader) fader.FadeIn(blinkTime);
-                }
-                
-                yield return new WaitForSeconds(blinkTime);
-            }
-            
-            foreach (Transform child in floor.transform)
-            {
-                var fader = child.GetComponent<MeshFader>();
-                if (fader) fader.FadeOut(blinkTime);
-            }
-
-            yield return new WaitForSeconds(blinkTime);
-            floor.SetActive(false);
-
-            yield return new WaitForSeconds(hideTime);
-            floor.SetActive(true);
-
-            foreach (Transform child in floor.transform)
-            {
-                var fader = child.GetComponent<MeshFader>();
-                if (fader) fader.FadeIn(blinkTime);
-            }
-
-            _isBlinking = false;
-        }
-        
-        private IEnumerator BlinkGround()
-        {
-            for (var i = 0; i < numberOfBlinks; i++)
-            {
-                foreach (Transform child in floor.transform)
-                    child.GetComponent<MeshRenderer>().enabled = false;
-                
-                yield return new WaitForSeconds(blinkTime);
-                
-                foreach (Transform child in floor.transform)
-                    child.GetComponent<MeshRenderer>().enabled = true;
-                
-                yield return new WaitForSeconds(blinkTime);
-            }
-        }
-        
         private IEnumerator ShowAndHideGround()
         {
             floor.gameObject.SetActive(false);

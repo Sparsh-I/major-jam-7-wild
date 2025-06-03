@@ -3,11 +3,14 @@ using UnityEngine;
 
 namespace Rules
 {
-    public class InvertedControlsRule : MonoBehaviour, IGameRule
+    public class SwapHandsRule : MonoBehaviour, IGameRule
     {
-        public string RuleName => "Inverted Controls";
-        private PlayerController _player;
+        public string RuleName => "Swap Hands";
         [SerializeField] private bool _active;
+
+        public bool IsSwapHandsActive() => _active;
+        private PlayerController _player;
+        
         
         private void Awake() {
             _player = FindObjectOfType<PlayerController>();
@@ -16,7 +19,7 @@ namespace Rules
         public void Activate()
         {
             _active = true;
-            _player.UpdateControlScheme(true, _player.isSwapped);
+            _player.UpdateControlScheme(_player.isInverted, true);
         }
 
         public void Deactivate()

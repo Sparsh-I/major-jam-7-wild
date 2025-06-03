@@ -21,10 +21,12 @@ namespace Managers
             }
 
             _instance = this;
+            gameText.enabled = false;
         }
 
         public void SetGameText(string text)
         {
+            gameText.enabled = true;
             gameText.text = text;
         }
     }

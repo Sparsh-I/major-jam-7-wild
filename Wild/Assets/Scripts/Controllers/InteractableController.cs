@@ -14,7 +14,10 @@ namespace Controllers
         private string itemNeeded;
         
         [Tooltip("Does this item change appearance by having something added to it (e.g. statue with rock added)?")] [SerializeField] 
-        private bool itemToAddTo;
+        protected bool itemToAddTo;
+        
+        [Tooltip("Does this item stay the same after interacting?")] [SerializeField] 
+        protected bool itemStaysTheSame;
         
         [Header("Interaction Texts")]
         [Tooltip("The text to display when interacting before getting the needed item")] [SerializeField]
@@ -25,7 +28,7 @@ namespace Controllers
 
         [Tooltip("The text to display when interacting after getting this item")] [SerializeField]
         private string afterUnlockText;
-
+        
         private bool _hasBeenUnlocked;
         private bool _completedFirstInteraction;
 
@@ -55,9 +58,9 @@ namespace Controllers
             return beforeUnlockText;
         }
 
-        private void RemoveChildObject()
+        protected virtual void RemoveChildObject()
         {
-            if (transform.childCount > 0)
+            if (transform.childCount > 0 && !itemStaysTheSame)
             {
                 var child = transform.GetChild(0);
                 child.gameObject.SetActive(itemToAddTo);

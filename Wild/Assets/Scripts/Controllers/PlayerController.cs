@@ -10,7 +10,7 @@ namespace Controllers
     {
         private Rigidbody _rb;
 
-        public PlayerInputActions PlayerControls { get; private set; }
+        private PlayerInputActions PlayerControls { get; set; }
         private InputAction _move, _jump, _interact;
 
         [Header("Movement Settings")]
@@ -32,8 +32,10 @@ namespace Controllers
         [SerializeField] private TextMeshProUGUI heldItemText;
         
         private GameManager _gameManager;
-        
         private InteractableController _currentInteractable;
+        
+        public bool isInverted;
+        public bool isSwapped;
         
         private Vector3 _moveDirection = Vector3.zero;
         public Vector2 Input2D { get; private set; }
@@ -55,6 +57,32 @@ namespace Controllers
         private void OnDisable()
         {
             DisableControls();
+        }
+
+        public void UpdateControlScheme(bool invertedActive, bool swappedActive)
+        {
+            ResetControlMap();
+
+            switch (invertedActive)
+            {
+                case true when swappedActive:
+                    EnableControls("PlayerSwapHandsInverted");
+                    break;
+                case true:
+                    EnableControls("PlayerInverted");
+                    break;
+                default:
+                    EnableControls(swappedActive ? "PlayerSwapHands" : "Player");
+                    break;
+            }
+        }
+
+        private void ResetControlMap()
+        {
+            PlayerControls.Player.Disable();
+            PlayerControls.PlayerInverted.Disable();
+            PlayerControls.PlayerSwapHands.Disable();
+            PlayerControls.PlayerSwapHandsInverted.Disable();
         }
 
         public void EnableControls(string controlMap)
