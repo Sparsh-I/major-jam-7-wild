@@ -10,7 +10,8 @@ namespace Managers
     {
         public List<MonoBehaviour> ruleBehaviours;
         private readonly List<IGameRule> _activeRules = new();
-        
+
+        [SerializeField] private int maxRules;
         [SerializeField] private TextMeshProUGUI activeRuleText;
         
         private void Start()
@@ -18,7 +19,7 @@ namespace Managers
             activeRuleText.text = "";
             
             var allRules = ruleBehaviours.OfType<IGameRule>().ToList();
-            var ruleCount = Random.Range(1, allRules.Count + 1);
+            var ruleCount = Random.Range(1, maxRules + 1);
 
             for (var i = 0; i < ruleCount; i++)
             {

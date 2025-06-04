@@ -29,7 +29,7 @@ namespace Controllers
         [SerializeField] private LayerMask groundLayer;
 
         [Header("Death Settings")]
-        [SerializeField] private string deathScene;
+        [SerializeField] private string deathReason;
         [SerializeField] private float deathYLevel;
         
         [Header("References")]
@@ -118,7 +118,7 @@ namespace Controllers
         
         void Update()
         {
-            if (transform.position.y < deathYLevel) SceneManager.LoadScene(deathScene);
+            if (transform.position.y < deathYLevel) GameManager.Instance.DisplayGameOverScreen(deathReason);
             
             heldItemText.text = heldItem;
             Input2D = _move.ReadValue<Vector2>();

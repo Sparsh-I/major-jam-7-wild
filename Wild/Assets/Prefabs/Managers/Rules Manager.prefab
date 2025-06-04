@@ -52,7 +52,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 1
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 0.1
+  m_PlaneDistance: 0.2
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -469,8 +469,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f79e071045cae3f4aa60c29c00498aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  outOfTimeScene: Game Over Time
-  max30SecondInterval: 5
+  deathReason: You ran out of time
+  min30SecInterval: 0
+  max30SecInterval: 0
   timerText: {fileID: 6119221420099561218}
 --- !u!1 &4611450840180041321
 GameObject:
@@ -977,6 +978,7 @@ MonoBehaviour:
   - {fileID: 3421387887726080160}
   - {fileID: 6810375596249686417}
   - {fileID: 2025334105720096915}
+  maxRules: 2
   activeRuleText: {fileID: 4656196854904879941}
 --- !u!1 &8050897591126824525
 GameObject:

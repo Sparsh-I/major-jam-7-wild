@@ -6,11 +6,13 @@ namespace Controllers
 {
     public class HiddenDoorController : InteractableController
     {
+        [Header("Hidden Door Settings")]
         [SerializeField] private GameObject hiddenDoor;
+        [SerializeField] private bool startVisible;
 
         private void Start()
         {
-            hiddenDoor.SetActive(false);
+            hiddenDoor.SetActive(startVisible);
         }
         
         protected override void RemoveChildObject()
@@ -21,7 +23,7 @@ namespace Controllers
                 child.gameObject.SetActive(itemToAddTo);
             }
             
-            hiddenDoor.SetActive(true);
+            hiddenDoor.SetActive(!startVisible);
         }
     }
 }

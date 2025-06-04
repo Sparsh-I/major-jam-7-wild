@@ -13,7 +13,9 @@ namespace Managers
 
         [SerializeField] private TextMeshProUGUI gameText;
         [SerializeField] private float typingFrequency;
-
+        [SerializeField] private GameObject gameOverScreen;
+        [SerializeField] private TextMeshProUGUI gameOverReason;
+        
         public Coroutine DisplayTextCoroutine;
         
         private string _currentText;
@@ -28,6 +30,11 @@ namespace Managers
 
             _instance = this;
             gameText.enabled = false;
+        }
+
+        private void Start()
+        {
+            gameOverScreen.SetActive(false);
         }
 
         public void SetGameText(string text)
@@ -57,6 +64,13 @@ namespace Managers
                 gameText.text += letter;
                 yield return new WaitForSeconds(typingFrequency);
             }
+        }
+
+        public void DisplayGameOverScreen(string reason)
+        {
+            Time.timeScale = 0f;
+            gameOverReason.text = reason;
+            gameOverScreen.SetActive(true);
         }
     }
 }

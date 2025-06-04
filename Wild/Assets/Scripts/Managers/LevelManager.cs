@@ -11,5 +11,17 @@ namespace Managers
         {
             if (other.CompareTag("Player")) SceneManager.LoadScene(levelToLoad);
         }
+
+        public void RestartLevel()
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+        
+        public void LoadMainMenu()
+        {
+            Time.timeScale = 1f;
+            SceneManager.LoadScene(0);
+        }
     }
 }

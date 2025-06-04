@@ -1,3 +1,4 @@
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,10 +9,11 @@ namespace Rules
     {
         public string RuleName => "Timer";
 
-        [SerializeField] private string outOfTimeScene;
+        [SerializeField] private string deathReason;
         
         [Header("Timer Settings")]
-        [SerializeField] private int max30SecondInterval;
+        [SerializeField] private int min30SecInterval;
+        [SerializeField] private int max30SecInterval;
         [SerializeField] private TextMeshProUGUI timerText;
         
         private float _timeLimit;
@@ -21,7 +23,7 @@ namespace Rules
         private void Start()
         {
             timerText.enabled = false;
-            _timeLimit = Random.Range(1, max30SecondInterval + 1) * 30;
+            _timeLimit = Random.Range(min30SecInterval, max30SecInterval + 1) * 30;
         }
         
         public void Activate()
@@ -47,7 +49,7 @@ namespace Rules
             
             if (_timer <= 0)
             {
-                SceneManager.LoadScene(outOfTimeScene);
+                GameManager.Instance.DisplayGameOverScreen(deathReason);
                 return;
             }
             
