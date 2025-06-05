@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Managers
 {
     public class GameManager : MonoBehaviour
     {
-        private static GameManager _instance;
-        public static GameManager Instance => _instance;
+        public static GameManager Instance { get; private set; }
 
         [SerializeField] private TextMeshProUGUI gameText;
         [SerializeField] private float typingFrequency;
@@ -18,22 +18,40 @@ namespace Managers
         
         public Coroutine DisplayTextCoroutine;
         
-        private string _currentText;
-        
         private void Awake()
         {
-            if (_instance != null && _instance != this)
+            if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            _instance = this;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
             gameText.enabled = false;
+        }
+        
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            Restart();
         }
 
         private void Start()
         {
+            Restart();
+        }
+
+        private void Restart()
+        {
+            Time.timeScale = 1f;
+            gameText.text = "";
+            gameText.enabled = false;
             gameOverScreen.SetActive(false);
         }
 
@@ -41,19 +59,9 @@ namespace Managers
         {
             gameText.enabled = true;
 
-            if (DisplayTextCoroutine != null)
-            {
-                StopCoroutine(DisplayTextCoroutine);
-                gameText.text = _currentText;
-                DisplayTextCoroutine = null;
-                _currentText = text;
-            }
-            else
-            {
-                _currentText = text;
-                DisplayTextCoroutine = StartCoroutine(DisplayText(_currentText));
-            }
-
+            if (DisplayTextCoroutine != null) StopCoroutine(DisplayTextCoroutine);
+            
+            DisplayTextCoroutine = StartCoroutine(DisplayText(text));
         }
 
         private IEnumerator DisplayText(string text)
@@ -64,6 +72,7 @@ namespace Managers
                 gameText.text += letter;
                 yield return new WaitForSeconds(typingFrequency);
             }
+            DisplayTextCoroutine = null;
         }
 
         public void DisplayGameOverScreen(string reason)

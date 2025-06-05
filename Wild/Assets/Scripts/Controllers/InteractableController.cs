@@ -55,7 +55,7 @@ namespace Controllers
                 return atUnlockText;
             }
 
-            if (GameManager.Instance.DisplayTextCoroutine != null) _completedFirstInteraction = true;
+            if (GameManager.Instance.DisplayTextCoroutine == null) _completedFirstInteraction = true;
             return beforeUnlockText;
         }
 

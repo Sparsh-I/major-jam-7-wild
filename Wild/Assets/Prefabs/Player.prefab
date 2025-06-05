@@ -487,7 +487,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   deathReason: You died
-  deathYLevel: -5
+  deathYLevel: -10
   heldItem: 
   heldItemText: {fileID: 4775474678599073756}
   isInverted: 0

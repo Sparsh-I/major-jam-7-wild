@@ -17,7 +17,7 @@ namespace Rules
         [SerializeField] private TextMeshProUGUI timerText;
         
         private float _timeLimit;
-        private float _timer;
+        private float _timer = 1;
         private bool _active;
 
         private void Start()
