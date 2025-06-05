@@ -7750,12 +7750,12 @@ PrefabInstance:
     - target: {fileID: 6810375596249686417, guid: d7d87c95cad40214286e0167d3a12341,
         type: 3}
       propertyPath: max30SecInterval
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6810375596249686417, guid: d7d87c95cad40214286e0167d3a12341,
         type: 3}
       propertyPath: min30SecInterval
-      value: 4
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8007038084922298569, guid: d7d87c95cad40214286e0167d3a12341,
         type: 3}

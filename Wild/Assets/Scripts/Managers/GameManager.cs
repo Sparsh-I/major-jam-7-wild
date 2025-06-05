@@ -51,8 +51,14 @@ namespace Managers
         {
             Time.timeScale = 1f;
             gameText.text = "";
-            gameText.enabled = false;
-            gameOverScreen.SetActive(false);
+            if (gameText != null)
+            {
+                gameText.text = "";
+                gameText.enabled = false;
+            }
+
+            if (gameOverScreen != null)
+                gameOverScreen.SetActive(false);
         }
 
         public void SetGameText(string text)
