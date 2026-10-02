@@ -1,4 +1,4 @@
-# **Glade [Mini Jam 184: Wild]**  
+# **Glade [Major Jam 7: Wild]**  
 A short 3D rule changing, isometric puzzle game in chambers of wilderness made for Major Jam 7, with the theme of wild and a limitation of "unpredictable rules".
 
 ---
